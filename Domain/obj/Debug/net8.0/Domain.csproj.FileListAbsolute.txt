@@ -1,0 +1,11 @@
+E:\appsistemas\AgendamentoPro\Domain\bin\Debug\net8.0\Domain.deps.json
+E:\appsistemas\AgendamentoPro\Domain\bin\Debug\net8.0\Domain.dll
+E:\appsistemas\AgendamentoPro\Domain\bin\Debug\net8.0\Domain.pdb
+E:\appsistemas\AgendamentoPro\Domain\obj\Debug\net8.0\Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\appsistemas\AgendamentoPro\Domain\obj\Debug\net8.0\Domain.AssemblyInfoInputs.cache
+E:\appsistemas\AgendamentoPro\Domain\obj\Debug\net8.0\Domain.AssemblyInfo.cs
+E:\appsistemas\AgendamentoPro\Domain\obj\Debug\net8.0\Domain.csproj.CoreCompileInputs.cache
+E:\appsistemas\AgendamentoPro\Domain\obj\Debug\net8.0\Domain.dll
+E:\appsistemas\AgendamentoPro\Domain\obj\Debug\net8.0\refint\Domain.dll
+E:\appsistemas\AgendamentoPro\Domain\obj\Debug\net8.0\Domain.pdb
+E:\appsistemas\AgendamentoPro\Domain\obj\Debug\net8.0\ref\Domain.dll
