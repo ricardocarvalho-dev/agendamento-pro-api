@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/b9f80d72-23fa-4d3c-9112-881877e66339/resourceGroups/rg-agendamentopro/providers/Microsoft.Web/sites/agendamentopro-api-ricardo",
+    "appService.deploySubpath": ""
+}

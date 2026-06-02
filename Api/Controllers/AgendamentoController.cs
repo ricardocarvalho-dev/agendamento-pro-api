@@ -22,16 +22,39 @@ public class AgendamentoController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Criar([FromBody] CriarAgendamentoDto dto)
     {
-        await _useCase.Executar(dto);
-
-        return Ok(new { mensagem = "Agendamento criado com sucesso" });
+        try
+        {
+            // Tenta executar a lógica de criação do agendamento
+            await _useCase.Executar(dto);
+            return Ok(new { mensagem = "Agendamento criado com sucesso" });
+        }
+        catch (Exception ex)
+        {
+            // CAPTURA DO VILÃO: Retorna o erro exato textualmente para o Swagger em vez de dar Erro 500 em branco
+            return StatusCode(500, new { 
+                mensagem = "A API barrou um erro interno no Use Case!",
+                erroReal = ex.Message, 
+                ondeQuebrou = ex.StackTrace,
+                erroInterno = ex.InnerException?.Message
+            });
+        }
     }
 
     [HttpGet]
     public async Task<IActionResult> Listar() // ✅ AGORA É ASYNC
     {
-        var lista = await _listarUseCase.Executar();
-        
-        return Ok(lista);
+        try
+        {
+            var lista = await _listarUseCase.Executar();
+            return Ok(lista);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { 
+                mensagem = "Erro ao tentar listar agendamentos!",
+                erroReal = ex.Message,
+                ondeQuebrou = ex.StackTrace
+            });
+        }
     }
 }

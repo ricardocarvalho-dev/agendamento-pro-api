@@ -1,0 +1,12 @@
+E:\appsistemas\AgendamentoPro\CrossCutting\bin\Debug\net8.0\CrossCutting.deps.json
+E:\appsistemas\AgendamentoPro\CrossCutting\bin\Debug\net8.0\CrossCutting.dll
+E:\appsistemas\AgendamentoPro\CrossCutting\bin\Debug\net8.0\CrossCutting.pdb
+E:\appsistemas\AgendamentoPro\CrossCutting\obj\Debug\net8.0\CrossCutting.GeneratedMSBuildEditorConfig.editorconfig
+E:\appsistemas\AgendamentoPro\CrossCutting\obj\Debug\net8.0\CrossCutting.AssemblyInfoInputs.cache
+E:\appsistemas\AgendamentoPro\CrossCutting\obj\Debug\net8.0\CrossCutting.AssemblyInfo.cs
+E:\appsistemas\AgendamentoPro\CrossCutting\obj\Debug\net8.0\CrossCutting.csproj.CoreCompileInputs.cache
+E:\appsistemas\AgendamentoPro\CrossCutting\obj\Debug\net8.0\CrossCutting.sourcelink.json
+E:\appsistemas\AgendamentoPro\CrossCutting\obj\Debug\net8.0\CrossCutting.dll
+E:\appsistemas\AgendamentoPro\CrossCutting\obj\Debug\net8.0\refint\CrossCutting.dll
+E:\appsistemas\AgendamentoPro\CrossCutting\obj\Debug\net8.0\CrossCutting.pdb
+E:\appsistemas\AgendamentoPro\CrossCutting\obj\Debug\net8.0\ref\CrossCutting.dll
