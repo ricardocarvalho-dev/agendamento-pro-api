@@ -11,7 +11,7 @@ public class AgendamentoConsumerWorker : BackgroundService
     private readonly ILogger<AgendamentoConsumerWorker> _logger;
     private readonly string _connectionUrl = "amqps://wgseihrb:KFWP5XSX1-6GYn1CevzJcu_kvgBmipc9@shark.rmq.cloudamqp.com/wgseihrb";
     private IConnection? _connection;
-    private IChannel? _channel;
+    private IModel? _channel;
 
     public AgendamentoConsumerWorker(ILogger<AgendamentoConsumerWorker> logger)
     {
@@ -22,51 +22,57 @@ public class AgendamentoConsumerWorker : BackgroundService
     {
         _logger.LogInformation("[Worker] Iniciando o consumidor de agendamentos...");
 
-        var factory = new ConnectionFactory() { Uri = new Uri(_connectionUrl) };
-        
-        // Abre conexão e canal de forma assíncrona (Padrão v7)
-        _connection = await factory.CreateConnectionAsync(stoppingToken);
-        _channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
+        try
+        {
+            var factory = new ConnectionFactory() { Uri = new Uri(_connectionUrl) };
+            
+            // Abre conexão e canal
+            _connection = factory.CreateConnection();
+            _channel = _connection.CreateModel();
 
-        // Garante que a fila existe antes de consumir
-        await _channel.QueueDeclareAsync(queue: "fila_agendamentos",
+            // Garante que a fila existe antes de consumir
+            _channel.QueueDeclare(queue: "agendamentos.eventos",
                                   durable: true,
                                   exclusive: false,
                                   autoDelete: false,
-                                  arguments: null,
-                                  cancellationToken: stoppingToken);
+                                  arguments: null);
 
-        // Cria o consumidor de eventos
-        var consumer = new AsyncEventingBasicConsumer(_channel);
-        
-        consumer.ReceivedAsync += async (model, ea) =>
-        {
-            var body = ea.Body.ToArray();
-            var message = Encoding.UTF8.GetString(body);
+            _logger.LogInformation("✅ Conectado ao RabbitMQ. Aguardando mensagens...");
+
+            // Cria o consumidor de eventos
+            var consumer = new EventingBasicConsumer(_channel);
             
-            _logger.LogInformation($"\n==================================================\n" +
-                                   $"[Worker] MENSAGEM RECEBIDA DO CLOUDAMQP!\n" +
-                                   $"Conteúdo: {message}\n" +
-                                   $"==================================================");
+            consumer.Received += (model, ea) =>
+            {
+                var body = ea.Body.ToArray();
+                var message = System.Text.Encoding.UTF8.GetString(body);
+                
+                _logger.LogInformation($"\n==================================================\n" +
+                                       $"[Worker] MENSAGEM RECEBIDA DO CLOUDAMQP!\n" +
+                                       $"Conteúdo: {message}\n" +
+                                       $"==================================================");
 
-            // Simulação de envio de e-mail ou WhatsApp
-            await Task.Delay(500, stoppingToken); 
+                // Simulação de envio de e-mail ou WhatsApp
+                Thread.Sleep(500); 
 
-            // Dá o "Ack" (Acknowledge) avisando o CloudAMQP que a mensagem foi processada com sucesso.
-            // Isso faz a mensagem SUMIR da fila permanentemente.
-            await _channel.BasicAckAsync(deliveryTag: ea.DeliveryTag, multiple: false, cancellationToken: stoppingToken);
-        };
+                // Dá o "Ack" (Acknowledge) avisando o CloudAMQP que a mensagem foi processada
+                _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+            };
 
-        // Inicia a leitura da fila de fato
-        await _channel.BasicConsumeAsync(queue: "fila_agendamentos",
-                                  autoAck: false, // Usamos false para só deletar após processar tudo no bloco acima
-                                  consumer: consumer,
-                                  cancellationToken: stoppingToken);
+            // Inicia a leitura da fila
+            _channel.BasicConsume(queue: "agendamentos.eventos",
+                                  autoAck: false,
+                                  consumer: consumer);
 
-        // Mantém o Worker vivo escutando a fila
-        while (!stoppingToken.IsCancellationRequested)
+            // Mantém o Worker vivo escutando a fila
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, stoppingToken);
+            }
+        }
+        catch (Exception ex)
         {
-            await Task.Delay(1000, stoppingToken);
+            _logger.LogError(ex, "❌ Erro no AgendamentoConsumerWorker");
         }
     }
 

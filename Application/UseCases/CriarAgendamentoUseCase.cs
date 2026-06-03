@@ -17,7 +17,6 @@ public class CriarAgendamentoUseCase
         _messagingService = messagingService;
     }
 
-    /*
     public async Task Executar(CriarAgendamentoDto dto)
     {
         var agendamento = new Agendamento
@@ -46,7 +45,8 @@ public class CriarAgendamentoUseCase
             Console.WriteLine($"[Mensageria] Erro ao publicar evento: {ex.Message}");
         }
     }
-    */
+    
+    /*
     public async Task Executar(CriarAgendamentoDto dto)
     {
         var agendamento = new Agendamento
@@ -66,4 +66,5 @@ public class CriarAgendamentoUseCase
             throw;
         }
     }
+    */
 }

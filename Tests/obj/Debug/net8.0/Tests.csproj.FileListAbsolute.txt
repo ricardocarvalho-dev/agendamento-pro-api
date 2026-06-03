@@ -56,12 +56,10 @@ E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.Configuration.Config
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.Diagnostics.EventLog.dll
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.Drawing.Common.dll
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
-E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.IO.Pipelines.dll
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.Memory.Data.dll
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.Runtime.Caching.dll
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.Security.Permissions.dll
-E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.Threading.RateLimiting.dll
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\System.Windows.Extensions.dll
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\xunit.abstractions.dll
 E:\appsistemas\AgendamentoPro\Tests\bin\Debug\net8.0\xunit.assert.dll

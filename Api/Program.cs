@@ -43,7 +43,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
 
 // AJUSTADO: Como o NotificationService foi limpo do deadlock, podemos registrá-lo com segurança!
-builder.Services.AddScoped<IMessagingService, NotificationService>();
+builder.Services.AddSingleton<IMessagingService>(sp => 
+    new NotificationService(sp.GetRequiredService<ILogger<NotificationService>>()));
 
 builder.Services.AddScoped<CriarAgendamentoUseCase>();
 builder.Services.AddScoped<ListarAgendamentosUseCase>();
