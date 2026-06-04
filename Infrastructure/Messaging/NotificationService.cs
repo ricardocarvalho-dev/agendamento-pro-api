@@ -10,7 +10,8 @@ public class NotificationService : IMessagingService
 {
     private IConnection? _connection;
     private readonly ILogger<NotificationService> _logger;
-    private readonly string _queueName = "agendamentos.eventos";
+    //private readonly string _queueName = "agendamentos.eventos";
+    private readonly string _queueName = "fila_agendamentos";
     private readonly string _connectionUrl;
 
     public NotificationService(ILogger<NotificationService> logger)
@@ -70,7 +71,8 @@ public class NotificationService : IMessagingService
 
                 // Declara a fila
                 channel.QueueDeclare(
-                    queue: _queueName,
+                    //queue: _queueName,
+                    queue: "fila_agendamentos",  // ← Mude aqui também
                     durable: true,
                     exclusive: false,
                     autoDelete: false
