@@ -8,43 +8,57 @@ namespace Infrastructure.Messaging;
 
 public class NotificationService : IMessagingService
 {
-    private readonly IConnection _connection;
+    private IConnection? _connection;
     private readonly ILogger<NotificationService> _logger;
     private readonly string _queueName = "agendamentos.eventos";
+    private readonly string _connectionUrl;
 
     public NotificationService(ILogger<NotificationService> logger)
     {
         _logger = logger;
+        
+        // Lê a variável de ambiente
+        _connectionUrl = Environment.GetEnvironmentVariable("RABBITMQ_CONNECTION_STRING") 
+            ?? "amqp://guest:guest@localhost:5672/";
+            
+        _logger.LogInformation($"✅ NotificationService inicializado (conexão será feita quando necessário)");
+    }
 
-        try
+    private IConnection GetConnection()
+    {
+        if (_connection == null || _connection.IsOpen == false)
         {
-            // Obtém a string de conexão do RabbitMQ
-            var rabbitMqUri = Environment.GetEnvironmentVariable("RABBITMQ_CONNECTION_STRING") 
-                ?? "amqp://guest:guest@localhost:5672/";
+            try
+            {
+                _logger.LogInformation($"Conectando ao RabbitMQ: {_connectionUrl.Split('@')[0]}@...");
+                
+                var factory = new ConnectionFactory() 
+                { 
+                    Uri = new Uri(_connectionUrl),
+                    DispatchConsumersAsync = true,
+                    AutomaticRecoveryEnabled = true
+                };
 
-            _logger.LogInformation($"Conectando ao RabbitMQ: {rabbitMqUri.Split('@')[0]}@...");
-
-            var factory = new ConnectionFactory() 
-            { 
-                Uri = new Uri(rabbitMqUri),
-                DispatchConsumersAsync = true
-            };
-
-            _connection = factory.CreateConnection();
-            _logger.LogInformation("✅ Conectado ao RabbitMQ com sucesso");
+                _connection = factory.CreateConnection();
+                _logger.LogInformation("✅ Conectado ao RabbitMQ com sucesso");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "❌ Erro ao conectar ao RabbitMQ");
+                throw;
+            }
         }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "❌ Erro ao conectar ao RabbitMQ");
-            throw;
-        }
+
+        return _connection;
     }
 
     public void EnviarNotificacaoAgendamento(object notificacao)
     {
         try
         {
-            using (var channel = _connection.CreateModel())
+            var connection = GetConnection();
+            
+            using (var channel = connection.CreateModel())
             {
                 // Declara a exchange
                 channel.ExchangeDeclare(
@@ -62,7 +76,7 @@ public class NotificationService : IMessagingService
                     autoDelete: false
                 );
 
-                // Faz o binding entre exchange e fila
+                // Faz o binding
                 channel.QueueBind(
                     queue: _queueName,
                     exchange: "agendamentos.exchange",
@@ -73,12 +87,12 @@ public class NotificationService : IMessagingService
                 var json = JsonSerializer.Serialize(notificacao);
                 var body = Encoding.UTF8.GetBytes(json);
 
-                // Define propriedades da mensagem
+                // Define propriedades
                 var properties = channel.CreateBasicProperties();
-                properties.Persistent = true; // Persiste a mensagem em disco
+                properties.Persistent = true;
                 properties.ContentType = "application/json";
 
-                // Publica a mensagem
+                // Publica
                 channel.BasicPublish(
                     exchange: "agendamentos.exchange",
                     routingKey: "agendamento.criado",
