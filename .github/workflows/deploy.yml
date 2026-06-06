@@ -21,7 +21,7 @@ jobs:
             web-app-name: 'agendamentopro-web-staging' # (Ajuste se tiver um front de staging)
           - branch: main
             environment: production
-            api-app-name: 'agendamentopro-api-ricardo'
+            api-app-name: 'agendamentopro-api-ricardo-aydrd0gbcxcacpb8'
             web-app-name: 'agendamentopro-web-prod'
 
     steps:
