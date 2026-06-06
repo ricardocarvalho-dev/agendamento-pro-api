@@ -61,7 +61,7 @@ jobs:
     # ==========================================
     - name: Publish FrontEnd
       if: success() && github.ref == 'refs/heads/main' # Roda apenas na main para a produção atual
-      run: dotnet publish ./gendamentoPro.FrontEnd/AgendamentoPro.FrontEnd/AgendamentoPro.FrontEnd.csproj -c Release -o ./publish-frontend
+      run: dotnet publish ./AgendamentoPro.FrontEnd/AgendamentoPro.FrontEnd/AgendamentoPro.FrontEnd.csproj -c Release -o ./publish-frontend
 
     - name: Compress FrontEnd Folder
       if: success() && github.ref == 'refs/heads/main'
