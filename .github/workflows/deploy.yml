@@ -18,10 +18,8 @@ jobs:
           - branch: develop
             environment: staging
             api-app-name: 'agendamentopro-api-ricardo-staging'
-            web-app-name: 'agendamentopro-web-staging' # (Ajuste se tiver um front de staging)
           - branch: main
             environment: production
-            #api-app-name: 'agendamentopro-api-ricardo-aydrd0gbcxcacpb8'
             api-app-name: 'agendamentopro-api-ricardo'
             web-app-name: 'agendamentopro-web-prod'
 
@@ -43,7 +41,7 @@ jobs:
       run: dotnet test Tests/Tests.csproj -c Release --no-build --verbosity normal
 
     # ==========================================
-    # ETAPAS DA API
+    # ETAPAS DA API (STAGING E PRODUCTION)
     # ==========================================
     - name: Publish API
       if: success()
@@ -54,15 +52,14 @@ jobs:
       uses: azure/webapps-deploy@v3
       with:
         app-name: ${{ matrix.api-app-name }}
-        #publish-profile: ${{ secrets[format('AZURE_PUBLISH_PROFILE_{0}', matrix.environment)] }}
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE_PRODUCTION }}
+        publish-profile: ${{ secrets[format('AZURE_PUBLISH_PROFILE_{0}', upper(matrix.environment))] }}
         package: ./publish-api
 
     # ==========================================
-    # ETAPAS DO FRONT-END (BLAZOR)
+    # ETAPAS DO FRONT-END (BLAZOR) - APENAS PRODUCTION
     # ==========================================
     - name: Publish FrontEnd
-      if: success() && github.ref == 'refs/heads/main' # Roda apenas na main para a produção atual
+      if: success() && github.ref == 'refs/heads/main'
       run: dotnet publish ./AgendamentoPro.FrontEnd/AgendamentoPro.FrontEnd/AgendamentoPro.FrontEnd.csproj -c Release -o ./publish-frontend
 
     - name: Compress FrontEnd Folder
@@ -74,5 +71,5 @@ jobs:
       uses: azure/webapps-deploy@v3
       with:
         app-name: ${{ matrix.web-app-name }}
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PRODUCTION }}
         package: './publish-frontend.zip'
