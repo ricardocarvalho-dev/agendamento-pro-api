@@ -17,9 +17,11 @@ jobs:
         include:
           - branch: develop
             environment: staging
+            environment_secret_suffix: STAGING
             api-app-name: 'agendamentopro-api-ricardo-staging'
           - branch: main
             environment: production
+            environment_secret_suffix: PRODUCTION
             api-app-name: 'agendamentopro-api-ricardo'
             web-app-name: 'agendamentopro-web-prod'
 
@@ -52,7 +54,7 @@ jobs:
       uses: azure/webapps-deploy@v3
       with:
         app-name: ${{ matrix.api-app-name }}
-        publish-profile: ${{ secrets[format('AZURE_PUBLISH_PROFILE_{0}', upper(matrix.environment))] }}
+        publish-profile: ${{ secrets[format('AZURE_PUBLISH_PROFILE_{0}', matrix.environment_secret_suffix)] }}
         package: ./publish-api
 
     # ==========================================
