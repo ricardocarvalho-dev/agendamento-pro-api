@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddHttpClient<AgendamentoService>(client =>
 {
-    client.BaseAddress = new Uri("https://agendamentopro-api-ricardo-aydrd0gbcxcacpb8.centralus-01.azurewebsites.net/");
+    client.BaseAddress = new Uri("https://agendamentopro-api-ricardo.centralus-01.azurewebsites.net/");
 });
 
 // Add services to the container.
